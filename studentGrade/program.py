@@ -58,6 +58,10 @@ parser.add_argument('-p', '--predict', action='store', metavar='',
 parser.add_argument('-alg', '--algorithm', dest='alg', default='lr', choices=['lr', 'rf'],
                     metavar='', help='Choose the algorithm to predict student\'s grade \'lr\' is linear regression, '
                                      '\'rf\' is random forest ex: python program.py -p 12,13,0,0,0,4 -alg rf')
+
+parser.add_argument('-m', '--metrics', dest='metrics', action='store_true',
+                    help='Evaluate mae(Mean absolute error) and rmse(Root mean squared error) of 2 models')
+parser.add_argument('-a', '--accuracy', dest='acc', action='store_true', help='Print the accuracy of 2 models')
 args = parser.parse_args()
 
 
@@ -91,3 +95,17 @@ def predict_value(arr):
 
 if args.predict:
     predict_value(args.predict)
+elif args.metrics:
+    metrics = model.evaluate_metrics()
+    lr = metrics['lr']
+    rf = metrics['rf']
+    print('Model metrics:')
+    print('Linear regression:   ')
+    print('mae: {}   rmse: {}'.format(lr['mae'], lr['rmse']))
+    print('Random forest:')
+    print('mae: {}   rmse: {}'.format(rf['mae'], rf['rmse']))
+elif args.acc:
+    accuracy = model.accuracy()
+    print('Accuracy for 2 models:')
+    for item in accuracy.keys():
+        print('{} : {}'.format(item, accuracy[item]))

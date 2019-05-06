@@ -54,18 +54,9 @@ def train(train_size=0.7):
     model_name_list = ['Linear Regression', 'Random Forest']
     linear_model = LinearRegression()
     random_forest_model = RandomForestRegressor(n_estimators=50)
-    # results = pd.DataFrame(columns=['mae', 'rmse'], index=model_name_list)
-    for i, model in enumerate([linear_model, random_forest_model]):
+
+    for model in [linear_model, random_forest_model]:
         model.fit(X_train, y_train)
-    #     predictions = model.predict(X_test)
-    #
-    #     # Metrics
-    #     mae = np.mean(abs(predictions - y_test))
-    #     rmse = np.sqrt(np.mean((predictions - y_test) ** 2))
-    #
-    #     # Insert results into the dataframe
-    #     model_name = model_name_list[i]
-    #     results.loc[model_name, :] = [mae, rmse]
 
     pickle.dump(linear_model, open('./trainedModel/linear_model.sav', 'wb'))
     pickle.dump(random_forest_model, open('./trainedModel/random_forest_model.sav', 'wb'))
@@ -89,22 +80,50 @@ def predict_grade(sample, op='linear'):
     return predict
 
 
+# Calculate mae and rmse
+def evaluate_metrics():
+    # get model and test data
+    lr_model = pickle.load(open('./trainedModel/linear_model.sav', 'rb'))
+    rf_model = pickle.load(open('./trainedModel/random_forest_model.sav', 'rb'))
+    x_test = pd.read_csv('./data/x_test.csv').values
+    y_test = pd.read_csv('./data/y_test.csv')['Grade'].values
+    model_name = ['lr', 'rf']
+    results = {}
+    for i, model in enumerate([lr_model, rf_model]):
+        predictions = model.predict(x_test)
+        # Metrics
+        metrics = {}
+        mae = np.mean(abs(predictions - y_test))
+        rmse = np.sqrt(np.mean((predictions - y_test) ** 2))
+        metrics['mae'] = mae
+        metrics['rmse'] = rmse
+
+        # Insert metrics in to results
+        results[model_name[i]] = metrics
+    return results
+
+
 def accuracy():
     accur = {}
     linear_model = pickle.load(open('./trainedModel/linear_model.sav', 'rb'))
     random_forest_model = pickle.load(open('./trainedModel/random_forest_model.sav', 'rb'))
-    X_test = pd.read_csv('./data/x_test.csv')
-    y_test = pd.read_csv('./data/y_test.csv')
-    accur['Linear Regression'] = linear_model.score(X_test, y_test)
-    accur['Random Forest'] = random_forest_model.score(X_test, y_test)
+    x_test = pd.read_csv('./data/x_test.csv', index_col=False)
+    y_test = pd.read_csv('./data/y_test.csv', index_col=False)
+    accur['Linear Regression'] = linear_model.score(x_test, y_test)
+    accur['Random Forest'] = random_forest_model.score(x_test, y_test)
     return accur
 
 
 if __name__ == '__main__':
-    # format_data()
-    df = pd.read_csv('./data/formatData.csv')
+    # # format_data()
+    # df = pd.read_csv('./data/formatData.csv')
     train(0.75)
-    sample = [[12, 13, 0, 0, 0, 4]]
-    grade = predict_grade(sample, 'linear')
-    # print(grade)
-    print(accuracy())
+    # sample = [[12, 13, 0, 0, 0, 4]]
+    # grade = predict_grade(sample, 'linear')
+    # # print(grade)
+    # print(accuracy())
+    # df = pd.read_csv('./data/x_test.csv')
+    # a = df.values
+    # print(a)
+    a = evaluate_metrics()
+    print(a)
