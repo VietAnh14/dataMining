@@ -5,11 +5,11 @@ import argparse
 class Train(argparse.Action):
     def __call__(self, parser, namespace, values, option_string):
         result = dict()
-        try:
-            val = float(values)
-        except ValueError:
-            print('Wrong argument exception, value error')
-            return
+        # try:
+        #     val = float(values)
+        # except Warning:
+        #     print('Wrong argument exception, value error')
+        #     return
         if values is None:
             print('Training ....')
             result = model.train()
@@ -46,7 +46,7 @@ class Train(argparse.Action):
 #                 print('Wrong alg, please read usage for more information')
 #         setattr(namespace, self.dest, values)
 
-
+# Create command
 parser = argparse.ArgumentParser(description='Data mining program project to predict student\'s grades')
 
 parser.add_argument('-t', '--train', action=Train, metavar='', nargs="?", help='Train model, can specific train size,'
@@ -59,6 +59,14 @@ parser.add_argument('-alg', '--algorithm', dest='alg', default='lr', choices=['l
                     metavar='', help='Choose the algorithm to predict student\'s grade \'lr\' is linear regression, '
                                      '\'rf\' is random forest ex: python program.py -p 12,13,0,0,0,4 -alg rf')
 args = parser.parse_args()
+
+
+def cal_accuracy():
+    pass
+
+
+def compare_accuracy():
+    pass
 
 
 def predict_value(arr):
