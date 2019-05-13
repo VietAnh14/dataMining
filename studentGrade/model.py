@@ -114,10 +114,21 @@ def accuracy():
     return accur
 
 
+# Linear regression formula
+def formula():
+    lr_model = pickle.load(open('./trainedModel/linear_model.sav', 'rb'))
+    x_test = pd.read_csv('./data/x_test.csv')
+    lr_formula = 'Grade = %0.2f +' % lr_model.intercept_
+    for i, col in enumerate(x_test.columns):
+        lr_formula += ' %0.2f * %s +' % (lr_model.coef_[i], col)
+
+    lr_formula = ' '.join(lr_formula.split(' ')[:-1])
+    return lr_formula
+
 if __name__ == '__main__':
     # # format_data()
     # df = pd.read_csv('./data/formatData.csv')
-    train(0.75)
+    # train(0.75)
     # sample = [[12, 13, 0, 0, 0, 4]]
     # grade = predict_grade(sample, 'linear')
     # # print(grade)
@@ -125,5 +136,6 @@ if __name__ == '__main__':
     # df = pd.read_csv('./data/x_test.csv')
     # a = df.values
     # print(a)
-    a = evaluate_metrics()
-    print(a)
+    # a = evaluate_metrics()
+    # print(a)
+    print(formula())

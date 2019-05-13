@@ -62,6 +62,7 @@ parser.add_argument('-alg', '--algorithm', dest='alg', default='lr', choices=['l
 parser.add_argument('-m', '--metrics', dest='metrics', action='store_true',
                     help='Evaluate mae(Mean absolute error) and rmse(Root mean squared error) of 2 models')
 parser.add_argument('-a', '--accuracy', dest='acc', action='store_true', help='Print the accuracy of 2 models')
+parser.add_argument('-f', '--formula', dest='formula', action='store_true', help='Print linear regression formula')
 args = parser.parse_args()
 
 
@@ -109,3 +110,7 @@ elif args.acc:
     print('Accuracy for 2 models:')
     for item in accuracy.keys():
         print('{} : {}'.format(item, accuracy[item]))
+elif args.formula:
+    formula = model.formula()
+    print("Formula of the linear regression model")
+    print(formula)
