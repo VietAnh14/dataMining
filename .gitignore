@@ -186,9 +186,10 @@ fabric.properties
 .idea/sonarlint
 
 # Trained model
-*.sav
+#*.sav
 
 # Formated data and test data 
-data/formatData.csv
-data/x_test.csv
-data/y_test.csv
+#data/*
+
+# .idea file
+.idea/*
