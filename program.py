@@ -61,11 +61,11 @@ def predict_value(arr):
         print('Wrong sample, please read usage for more details')
         return
     if args.alg:
-        if args.alg == 'rf':
+        if args.alg == 'lr':
             print('Linear regression:')
             predict = model.predict_grade(sample, 'random')
             print('Predict grade: {}'.format(predict[0].round(2)))
-        elif args.alg == 'lr':
+        elif args.alg == 'rf':
             predict = model.predict_grade(sample, 'linear')
             print('Random forest:')
             print('Predict grade: {}'.format(predict[0].round(2)))
