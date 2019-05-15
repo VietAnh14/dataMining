@@ -19,32 +19,10 @@ class Train(argparse.Action):
         else:
             print('Wrong train size, train size should be > 0.5 and < 1')
             return
-        print('Accuracy:')
+        print('R - Square:')
         for item in result:
             print(item, result[item])
         setattr(namespace, self.dest, values)
-
-
-# class Predict(argparse.Action):
-#     def __call__(self, parser, namespace, values, option_string):
-#         sample = list()
-#         try:
-#             arr = [float(x) for x in values.split(',')]
-#             sample.append(arr)
-#         except ValueError:
-#             print('Wrong sample, please read usage for more details')
-#             return
-#         if args.alg:
-#             if args.alg == 'rt':
-#                 predict = model.predict_grade(sample, 'random')
-#                 print('Predict grade: {}'.format(predict[0].round(2)))
-#             elif args.alg == 'lr':
-#                 predict = model.predict_grade(sample, 'linear')
-#                 print('Predict grade: {}'.format(predict[0].round(2)))
-#
-#             else:
-#                 print('Wrong alg, please read usage for more information')
-#         setattr(namespace, self.dest, values)
 
 # Create command
 parser = argparse.ArgumentParser(description='Data mining program project to predict student\'s grades')
@@ -61,7 +39,7 @@ parser.add_argument('-alg', '--algorithm', dest='alg', default='lr', choices=['l
 
 parser.add_argument('-m', '--metrics', dest='metrics', action='store_true',
                     help='Evaluate mae(Mean absolute error) and rmse(Root mean squared error) of 2 models')
-parser.add_argument('-a', '--accuracy', dest='acc', action='store_true', help='Print the accuracy of 2 models')
+parser.add_argument('-r', '--rsquare', dest='r', action='store_true', help='Print the R - Square (R^2) of 2 models')
 parser.add_argument('-f', '--formula', dest='formula', action='store_true', help='Print linear regression formula')
 args = parser.parse_args()
 
@@ -84,10 +62,12 @@ def predict_value(arr):
         return
     if args.alg:
         if args.alg == 'rf':
+            print('Linear regression:')
             predict = model.predict_grade(sample, 'random')
             print('Predict grade: {}'.format(predict[0].round(2)))
         elif args.alg == 'lr':
             predict = model.predict_grade(sample, 'linear')
+            print('Random forest:')
             print('Predict grade: {}'.format(predict[0].round(2)))
 
         else:
@@ -105,9 +85,9 @@ elif args.metrics:
     print('mae: {}   rmse: {}'.format(lr['mae'], lr['rmse']))
     print('Random forest:')
     print('mae: {}   rmse: {}'.format(rf['mae'], rf['rmse']))
-elif args.acc:
-    accuracy = model.accuracy()
-    print('Accuracy for 2 models:')
+elif args.r:
+    accuracy = model.r_square()
+    print('R - Square value for 2 models:')
     for item in accuracy.keys():
         print('{} : {}'.format(item, accuracy[item]))
 elif args.formula:
