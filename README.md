@@ -30,6 +30,10 @@ python program.py -p 12,13,0,0,0,4 -alg rf
 ```bash
 python program.py -m
 ```
+* Tính giá trị R-Square R^2 của 2 mô hình 
+```bash
+python program.py -r
+```
 * In ra hàm hồi quy tìm được của linear model
 ```bash
 python program.py -f
